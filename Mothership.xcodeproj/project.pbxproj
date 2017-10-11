@@ -20,6 +20,24 @@
 		E161E9DA1F8D3EF1000A8794 /* SKTAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D792241F8BF691008055A2 /* SKTAudio.swift */; };
 		E161E9DB1F8D3EF4000A8794 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D792251F8BF691008055A2 /* Vector3.swift */; };
 		E161E9DC1F8D3EF7000A8794 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D792261F8BF691008055A2 /* CGFloat+Extensions.swift */; };
+		E1A76C971F8E7009002F8D4A /* CoinSArrow.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76C961F8E6FF5002F8D4A /* CoinSArrow.sks */; };
+		E1A76C981F8E700F002F8D4A /* Break5Across.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76C951F8E6E4C002F8D4A /* Break5Across.sks */; };
+		E1A76CA31F8E7183002F8D4A /* BreakArrow.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76C9A1F8E717C002F8D4A /* BreakArrow.sks */; };
+		E1A76CA41F8E7186002F8D4A /* BreakDiagonal.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76C9B1F8E717C002F8D4A /* BreakDiagonal.sks */; };
+		E1A76CA51F8E718A002F8D4A /* Coin5Across.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76CA21F8E717D002F8D4A /* Coin5Across.sks */; };
+		E1A76CA61F8E718D002F8D4A /* CoinCross.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76C991F8E717C002F8D4A /* CoinCross.sks */; };
+		E1A76CA71F8E7191002F8D4A /* CoinDiagonal.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76C9C1F8E717C002F8D4A /* CoinDiagonal.sks */; };
+		E1A76CA81F8E7196002F8D4A /* CoinS5Across.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76C9F1F8E717C002F8D4A /* CoinS5Across.sks */; };
+		E1A76CA91F8E719B002F8D4A /* CoinSDiagonal.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76C9D1F8E717C002F8D4A /* CoinSDiagonal.sks */; };
+		E1A76CAA1F8E71A0002F8D4A /* PlatformArrow.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76CA01F8E717C002F8D4A /* PlatformArrow.sks */; };
+		E1A76CAB1F8E71A7002F8D4A /* PlatformDiagonal.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76C9E1F8E717C002F8D4A /* PlatformDiagonal.sks */; };
+		E1A76CAC1F8E71C2002F8D4A /* CoinSCross.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76CA11F8E717C002F8D4A /* CoinSCross.sks */; };
+		E1A76CB01F8E7B69002F8D4A /* ToxicWaste.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76CAE1F8E7B69002F8D4A /* ToxicWaste.sks */; };
+		E1A76CB41F8E9ED7002F8D4A /* SmokeTrail.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76CB21F8E9ED7002F8D4A /* SmokeTrail.sks */; };
+		E1A76CBA1F8EAAF4002F8D4A /* BrokenPlatform.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76CB61F8EAADB002F8D4A /* BrokenPlatform.sks */; };
+		E1A76CBB1F8EAAF7002F8D4A /* CollectNormal.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76CB81F8EAADB002F8D4A /* CollectNormal.sks */; };
+		E1A76CBC1F8EAAFB002F8D4A /* CollectSpecial.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76CB91F8EAADB002F8D4A /* CollectSpecial.sks */; };
+		E1A76CBD1F8EAB00002F8D4A /* PlayerTrail.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1A76CB71F8EAADB002F8D4A /* PlayerTrail.sks */; };
 		E1BB74291F8ACD5E00A278EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BB74281F8ACD5E00A278EA /* AppDelegate.swift */; };
 		E1BB742B1F8ACD5E00A278EA /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1BB742A1F8ACD5E00A278EA /* GameScene.sks */; };
 		E1BB742D1F8ACD5E00A278EA /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = E1BB742C1F8ACD5E00A278EA /* Actions.sks */; };
@@ -33,6 +51,24 @@
 
 /* Begin PBXFileReference section */
 		E161E9CF1F8D3244000A8794 /* CoinArrow.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CoinArrow.sks; sourceTree = "<group>"; };
+		E1A76C951F8E6E4C002F8D4A /* Break5Across.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Break5Across.sks; sourceTree = "<group>"; };
+		E1A76C961F8E6FF5002F8D4A /* CoinSArrow.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CoinSArrow.sks; sourceTree = "<group>"; };
+		E1A76C991F8E717C002F8D4A /* CoinCross.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CoinCross.sks; sourceTree = "<group>"; };
+		E1A76C9A1F8E717C002F8D4A /* BreakArrow.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BreakArrow.sks; sourceTree = "<group>"; };
+		E1A76C9B1F8E717C002F8D4A /* BreakDiagonal.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BreakDiagonal.sks; sourceTree = "<group>"; };
+		E1A76C9C1F8E717C002F8D4A /* CoinDiagonal.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CoinDiagonal.sks; sourceTree = "<group>"; };
+		E1A76C9D1F8E717C002F8D4A /* CoinSDiagonal.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CoinSDiagonal.sks; sourceTree = "<group>"; };
+		E1A76C9E1F8E717C002F8D4A /* PlatformDiagonal.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PlatformDiagonal.sks; sourceTree = "<group>"; };
+		E1A76C9F1F8E717C002F8D4A /* CoinS5Across.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CoinS5Across.sks; sourceTree = "<group>"; };
+		E1A76CA01F8E717C002F8D4A /* PlatformArrow.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PlatformArrow.sks; sourceTree = "<group>"; };
+		E1A76CA11F8E717C002F8D4A /* CoinSCross.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CoinSCross.sks; sourceTree = "<group>"; };
+		E1A76CA21F8E717D002F8D4A /* Coin5Across.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Coin5Across.sks; sourceTree = "<group>"; };
+		E1A76CAE1F8E7B69002F8D4A /* ToxicWaste.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ToxicWaste.sks; sourceTree = "<group>"; };
+		E1A76CB21F8E9ED7002F8D4A /* SmokeTrail.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SmokeTrail.sks; sourceTree = "<group>"; };
+		E1A76CB61F8EAADB002F8D4A /* BrokenPlatform.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BrokenPlatform.sks; sourceTree = "<group>"; };
+		E1A76CB71F8EAADB002F8D4A /* PlayerTrail.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PlayerTrail.sks; sourceTree = "<group>"; };
+		E1A76CB81F8EAADB002F8D4A /* CollectNormal.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CollectNormal.sks; sourceTree = "<group>"; };
+		E1A76CB91F8EAADB002F8D4A /* CollectSpecial.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CollectSpecial.sks; sourceTree = "<group>"; };
 		E1BB74251F8ACD5E00A278EA /* Mothership.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mothership.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1BB74281F8ACD5E00A278EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E1BB742A1F8ACD5E00A278EA /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -69,6 +105,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E1A76CAD1F8E7AF6002F8D4A /* Particles */ = {
+			isa = PBXGroup;
+			children = (
+				E1A76CB61F8EAADB002F8D4A /* BrokenPlatform.sks */,
+				E1A76CB81F8EAADB002F8D4A /* CollectNormal.sks */,
+				E1A76CB91F8EAADB002F8D4A /* CollectSpecial.sks */,
+				E1A76CB71F8EAADB002F8D4A /* PlayerTrail.sks */,
+				E1A76CAE1F8E7B69002F8D4A /* ToxicWaste.sks */,
+				E1A76CB21F8E9ED7002F8D4A /* SmokeTrail.sks */,
+			);
+			path = Particles;
+			sourceTree = "<group>";
+		};
 		E1BB741C1F8ACD5E00A278EA = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +137,7 @@
 		E1BB74271F8ACD5E00A278EA /* Mothership */ = {
 			isa = PBXGroup;
 			children = (
+				E1A76CAD1F8E7AF6002F8D4A /* Particles */,
 				E1D7921A1F8BF691008055A2 /* SKTUtils */,
 				E1D792171F8BEEBF008055A2 /* Scene Files */,
 				E1BB74281F8ACD5E00A278EA /* AppDelegate.swift */,
@@ -106,7 +156,19 @@
 		E1D792171F8BEEBF008055A2 /* Scene Files */ = {
 			isa = PBXGroup;
 			children = (
+				E1A76C9A1F8E717C002F8D4A /* BreakArrow.sks */,
+				E1A76C9B1F8E717C002F8D4A /* BreakDiagonal.sks */,
+				E1A76CA21F8E717D002F8D4A /* Coin5Across.sks */,
+				E1A76C991F8E717C002F8D4A /* CoinCross.sks */,
+				E1A76C9C1F8E717C002F8D4A /* CoinDiagonal.sks */,
+				E1A76C9F1F8E717C002F8D4A /* CoinS5Across.sks */,
+				E1A76CA11F8E717C002F8D4A /* CoinSCross.sks */,
+				E1A76C9D1F8E717C002F8D4A /* CoinSDiagonal.sks */,
+				E1A76CA01F8E717C002F8D4A /* PlatformArrow.sks */,
+				E1A76C9E1F8E717C002F8D4A /* PlatformDiagonal.sks */,
+				E1A76C961F8E6FF5002F8D4A /* CoinSArrow.sks */,
 				E1D792181F8BEF26008055A2 /* Platform5Across.sks */,
+				E1A76C951F8E6E4C002F8D4A /* Break5Across.sks */,
 				E161E9CF1F8D3244000A8794 /* CoinArrow.sks */,
 			);
 			path = "Scene Files";
@@ -192,11 +254,29 @@
 			files = (
 				E161E9D01F8D3244000A8794 /* CoinArrow.sks in Resources */,
 				E1BB74341F8ACD5E00A278EA /* Main.storyboard in Resources */,
+				E1A76C981F8E700F002F8D4A /* Break5Across.sks in Resources */,
 				E1BB742B1F8ACD5E00A278EA /* GameScene.sks in Resources */,
+				E1A76CBC1F8EAAFB002F8D4A /* CollectSpecial.sks in Resources */,
 				E1BB74361F8ACD5E00A278EA /* Assets.xcassets in Resources */,
+				E1A76CA71F8E7191002F8D4A /* CoinDiagonal.sks in Resources */,
+				E1A76CAA1F8E71A0002F8D4A /* PlatformArrow.sks in Resources */,
+				E1A76CBD1F8EAB00002F8D4A /* PlayerTrail.sks in Resources */,
+				E1A76CA61F8E718D002F8D4A /* CoinCross.sks in Resources */,
+				E1A76CB01F8E7B69002F8D4A /* ToxicWaste.sks in Resources */,
+				E1A76CBA1F8EAAF4002F8D4A /* BrokenPlatform.sks in Resources */,
+				E1A76CB41F8E9ED7002F8D4A /* SmokeTrail.sks in Resources */,
+				E1A76CA31F8E7183002F8D4A /* BreakArrow.sks in Resources */,
+				E1A76C971F8E7009002F8D4A /* CoinSArrow.sks in Resources */,
+				E1A76CAC1F8E71C2002F8D4A /* CoinSCross.sks in Resources */,
+				E1A76CBB1F8EAAF7002F8D4A /* CollectNormal.sks in Resources */,
+				E1A76CA51F8E718A002F8D4A /* Coin5Across.sks in Resources */,
+				E1A76CAB1F8E71A7002F8D4A /* PlatformDiagonal.sks in Resources */,
 				E1BB74391F8ACD5E00A278EA /* LaunchScreen.storyboard in Resources */,
+				E1A76CA91F8E719B002F8D4A /* CoinSDiagonal.sks in Resources */,
+				E1A76CA41F8E7186002F8D4A /* BreakDiagonal.sks in Resources */,
 				E1BB742D1F8ACD5E00A278EA /* Actions.sks in Resources */,
 				E1D792191F8BEF26008055A2 /* Platform5Across.sks in Resources */,
+				E1A76CA81F8E7196002F8D4A /* CoinS5Across.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

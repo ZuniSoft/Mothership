@@ -46,9 +46,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var backgroundOverlayTemplate: SKNode!
     var backgroundOverlayHeight: CGFloat!
     var player: SKSpriteNode!
+    var lives = 3
 
     var platform5Across: SKSpriteNode!
     var coinArrow: SKSpriteNode!
+    var platformArrow: SKSpriteNode!
+    var platformDiagonal: SKSpriteNode!
+    var breakArrow: SKSpriteNode!
+    var break5Across: SKSpriteNode!
+    var breakDiagonal: SKSpriteNode!
+    var coin5Across: SKSpriteNode!
+    var coinDiagonal: SKSpriteNode!
+    var coinCross: SKSpriteNode!
+    var coinS5Across: SKSpriteNode!
+    var coinSDiagonal: SKSpriteNode!
+    var coinSCross: SKSpriteNode!
+    var coinSArrow: SKSpriteNode!
+    
     var toxicWaste: SKSpriteNode!
     var lastOverlayPosition = CGPoint.zero
     var lastOverlayHeight: CGFloat = 0.0
@@ -77,17 +91,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        let other = contact.bodyA.categoryBitMask ==
-            PhysicsCategory.Player ? contact.bodyB : contact.bodyA
+        let other = contact.bodyA.categoryBitMask == PhysicsCategory.Player ? contact.bodyB : contact.bodyA
         switch other.categoryBitMask {
         case PhysicsCategory.CoinNormal:
             if let coin = other.node as? SKSpriteNode {
                 coin.removeFromParent()
                 jumpPlayer()
             }
+        case PhysicsCategory.CoinSpecial:
+            if let coin = other.node as? SKSpriteNode {
+                coin.removeFromParent()
+                boostPlayer()
+            }
         case PhysicsCategory.PlatformNormal:
             if let _ = other.node as? SKSpriteNode {
                 if player.physicsBody!.velocity.dy < 0 {
+                    jumpPlayer()
+                }
+            }
+        case PhysicsCategory.PlatformBreakable:
+            if let platform = other.node as? SKSpriteNode {
+                if player.physicsBody!.velocity.dy < 0 {
+                    platform.removeFromParent()
                     jumpPlayer()
                 }
             }
@@ -117,7 +142,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             updateLevel()
             updatePlayer()
             updateToxicWaste(deltaTime)
-            updateCollisionLava()
+            updateCollisionToxicWaste()
         }
     }
     
@@ -137,8 +162,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         platform5Across = loadForegroundOverlayTemplate("Platform5Across")
         coinArrow = loadForegroundOverlayTemplate("CoinArrow")
+        platformArrow = loadForegroundOverlayTemplate("PlatformArrow")
+        platform5Across = loadForegroundOverlayTemplate("Platform5Across")
+        platformDiagonal = loadForegroundOverlayTemplate("PlatformDiagonal")
+        breakArrow = loadForegroundOverlayTemplate("BreakArrow")
+        break5Across = loadForegroundOverlayTemplate("Break5Across")
+        breakDiagonal = loadForegroundOverlayTemplate("BreakDiagonal")
+        coin5Across = loadForegroundOverlayTemplate("Coin5Across")
+        coinDiagonal = loadForegroundOverlayTemplate("CoinDiagonal")
+        coinCross = loadForegroundOverlayTemplate("CoinCross")
+        coinArrow = loadForegroundOverlayTemplate("CoinArrow")
+        coinS5Across = loadForegroundOverlayTemplate("CoinS5Across")
+        coinSDiagonal = loadForegroundOverlayTemplate("CoinSDiagonal")
+        coinSCross = loadForegroundOverlayTemplate("CoinSCross")
+        coinSArrow = loadForegroundOverlayTemplate("CoinSArrow")
         
-        toxicWaste = fgNode.childNode(withName: "ToxicWaste") as! SKSpriteNode
+        setupToxicWaste()
         
         addChild(cameraNode)
         camera = cameraNode
@@ -178,7 +217,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupPlayer() {
-        player.physicsBody = SKPhysicsBody(circleOfRadius:player.size.width)
+        player.physicsBody = SKPhysicsBody(circleOfRadius:player.size.width * 0.9)
         player.physicsBody!.isDynamic = false
         player.physicsBody!.allowsRotation = false
         player.physicsBody!.categoryBitMask = PhysicsCategory.Player
@@ -220,7 +259,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setPlayerVelocity(_ amount:CGFloat) {
-        let gain: CGFloat = 1.5
+        let gain: CGFloat = 2.5
         player.physicsBody!.velocity.dy =
             max(player.physicsBody!.velocity.dy, amount * gain)
     }
@@ -235,6 +274,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func superBoostPlayer() {
         setPlayerVelocity(1700)
+    }
+    
+    func addTrail(name: String) -> SKEmitterNode {
+        let trail = SKEmitterNode(fileNamed: name)!
+        trail.zPosition = -1
+        trail.targetNode = fgNode
+        player.addChild(trail)
+        return trail
+    }
+    
+    func removeTrail(trail: SKEmitterNode) {
+        trail.numParticlesToEmit = 1
+        trail.run(SKAction.removeFromParentAfterDelay(1.0))
     }
     
     func updateToxicWaste(_ dt: TimeInterval) {
@@ -254,11 +306,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         toxicWaste.position.y = newToxicWastePositionY
     }
     
-    func updateCollisionLava() {
-        if player.position.y < toxicWaste.position.y + 90 {
-            playerState = .toxicWaste
-            print("Toxic Waste!")
+    func setupToxicWaste() {
+        toxicWaste = fgNode.childNode(withName: "ToxicWaste") as! SKSpriteNode
+        let emitter = SKEmitterNode(fileNamed: "ToxicWaste.sks")!
+        emitter.particlePositionRange = CGVector(dx: size.width
+            * 1.125, dy: 0.0)
+        emitter.advanceSimulationTime(3.0)
+        toxicWaste.addChild(emitter)
+    }
+    
+    func updateCollisionToxicWaste() {
+        if player.position.y < toxicWaste.position.y + 180 {
+            if playerState != .toxicWaste {
+                playerState = .toxicWaste
+                let smokeTrail = addTrail(name: "SmokeTrail")
+                run(SKAction.sequence([
+                    SKAction.wait(forDuration: 3.0),
+                    SKAction.run() {
+                        self.removeTrail(trail: smokeTrail)
+                    }
+                ]))
+            }
             boostPlayer()
+            lives -= 1
+            if lives <= 0 {
+                gameOver()
+            }
         }
     }
     
@@ -316,13 +389,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func createForegroundOverlay(_ overlayTemplate: SKSpriteNode, flipX: Bool) {
         let foregroundOverlay = overlayTemplate.copy() as! SKSpriteNode
         lastOverlayPosition.y = lastOverlayPosition.y +
-            (lastOverlayHeight + (foregroundOverlay.size.height / 2.0))
-        lastOverlayHeight = foregroundOverlay.size.height / 2.0
+            (lastOverlayHeight + (foregroundOverlay.size.height * 1.1))
+        lastOverlayHeight = foregroundOverlay.size.height * 1.1
         foregroundOverlay.position = lastOverlayPosition
         
         if flipX == true {
             foregroundOverlay.xScale = -1.0
-        
         }
         
         fgNode.addChild(foregroundOverlay)
@@ -330,13 +402,80 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func addRandomForegroundOverlay() {
         let overlaySprite: SKSpriteNode!
+        var flipH = false
         let platformPercentage = 60
+        
         if Int.random(min: 1, max: 100) <= platformPercentage {
-            overlaySprite = platform5Across
+            if Int.random(min: 1, max: 100) <= 75 {
+                // Create standard platforms 75%
+                switch Int.random(min: 0, max: 3) {
+                case 0:
+                    overlaySprite = platformArrow
+                case 1:
+                    overlaySprite = platform5Across
+                case 2:
+                    overlaySprite = platformDiagonal
+                case 3:
+                    overlaySprite = platformDiagonal
+                    flipH = true
+                default:
+                    overlaySprite = platformArrow
+                }
+            } else {
+                // Create breakable platforms 25%
+                switch Int.random(min: 0, max: 3) {
+                case 0:
+                    overlaySprite = breakArrow
+                case 1:
+                    overlaySprite = break5Across
+                case 2:
+                    overlaySprite = breakDiagonal
+                case 3:
+                    overlaySprite = breakDiagonal
+                    flipH = true
+                default:
+                    overlaySprite = breakArrow
+                }
+            }
         } else {
-            overlaySprite = coinArrow
+            if Int.random(min: 1, max: 100) <= 75 {
+                // Create standard coins 75%
+                switch Int.random(min: 0, max: 4) {
+                case 0:
+                    overlaySprite = coinArrow
+                case 1:
+                    overlaySprite = coin5Across
+                case 2:
+                    overlaySprite = coinDiagonal
+                case 3:
+                    overlaySprite = coinDiagonal
+                    flipH = true
+                case 4:
+                    overlaySprite = coinCross
+                default:
+                    overlaySprite = coinArrow
+                }
+            } else {
+                // Create special coins 25%
+                switch Int.random(min: 0, max: 4) {
+                case 0:
+                    overlaySprite = coinSArrow
+                case 1:
+                    overlaySprite = coinS5Across
+                case 2:
+                    overlaySprite = coinSDiagonal
+                case 3:
+                    overlaySprite = coinSDiagonal
+                    flipH = true
+                case 4:
+                    overlaySprite = coinSCross
+                default:
+                    overlaySprite = coinSArrow
+                }
+            }
         }
-        createForegroundOverlay(overlaySprite, flipX: false)
+        
+        createForegroundOverlay(overlaySprite, flipX: flipH)
     }
     
     func createBackgroundOverlay() {
@@ -369,12 +508,76 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             SKAction.run(startGame)]))
     }
     
-    func startGame() {
-        player.physicsBody!.isDynamic = true
-        fgNode.childNode(withName: "Bomb")!.removeFromParent()
-        gameState = .playing
+    func explosion(intensity: CGFloat) -> SKEmitterNode {
+        let emitter = SKEmitterNode()
+        let particleTexture = SKTexture(imageNamed: "Spark")
         
+        emitter.zPosition = 2
+        emitter.particleTexture = particleTexture
+        emitter.particleBirthRate = 4000 * intensity
+        emitter.numParticlesToEmit = Int(400 * intensity)
+        emitter.particleLifetime = 2.0
+        emitter.emissionAngle = CGFloat(90.0).degreesToRadians()
+        emitter.emissionAngleRange = CGFloat(360.0).degreesToRadians()
+        emitter.particleSpeed = 600 * intensity
+        emitter.particleSpeedRange = 1000 * intensity
+        emitter.particleAlpha = 1.0
+        emitter.particleAlphaRange = 0.25
+        emitter.particleScale = 1.2
+        emitter.particleScaleRange = 2.0
+        emitter.particleScaleSpeed = -1.5
+        emitter.particleColor = SKColor.orange
+        emitter.particleColorBlendFactor = 1
+        emitter.particleBlendMode = SKBlendMode.add
+        emitter.run(SKAction.removeFromParentAfterDelay(2.0))
+        
+        let sequence = SKKeyframeSequence(capacity: 5)
+        sequence.addKeyframeValue(SKColor.white, time: 0)
+        sequence.addKeyframeValue(SKColor.yellow, time: 0.10)
+        sequence.addKeyframeValue(SKColor.red, time: 0.75)
+        sequence.addKeyframeValue(SKColor.black, time: 0.95)
+        emitter.particleColorSequence = sequence
+        
+        return emitter
+    }
+    
+    func startGame() {
+        UIApplication.shared.isIdleTimerDisabled = true
+        
+        let bomb = fgNode.childNode(withName: "Bomb")!
+        let bombBlast = explosion(intensity: 2.0)
+        bombBlast.position = bomb.position
+        fgNode.addChild(bombBlast)
+        
+        bomb.removeFromParent()
+        
+        gameState = .playing
+        player.physicsBody!.isDynamic = true
         superBoostPlayer()
+    }
+    
+    func gameOver() {
+        UIApplication.shared.isIdleTimerDisabled = false
+        
+        gameState = .gameOver
+        playerState = .dead
+        
+        physicsWorld.contactDelegate = nil
+        player.physicsBody?.isDynamic = false
+        
+        let moveUp = SKAction.moveBy(x: 0.0, y: size.height/2.0,
+                                     duration: 0.5)
+        moveUp.timingMode = .easeOut
+        let moveDown = SKAction.moveBy(x: 0.0,
+                                       y: -(size.height * 1.5),
+                                       duration: 1.0)
+        moveDown.timingMode = .easeIn
+        player.run(SKAction.sequence([moveUp, moveDown]))
+        
+        let gameOverSprite = SKSpriteNode(imageNamed: "GameOver")
+        gameOverSprite.position = camera!.position
+        gameOverSprite.zPosition = 10
+        addChild(gameOverSprite)
     }
     
     // Events
@@ -382,6 +585,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                with event: UIEvent?) {
         if gameState == .waitingForTap {
             bombDrop()
+        } else if gameState == .gameOver {
+            let newScene = GameScene(fileNamed:"GameScene")
+            newScene!.scaleMode = .aspectFill
+            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+            view?.presentScene(newScene!, transition: reveal)
         }
     }
 }
