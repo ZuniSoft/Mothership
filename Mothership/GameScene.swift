@@ -76,6 +76,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let cameraNode = SKCameraNode()
     
+    let soundBombDrop = SKAction.playSoundFileNamed("bombDrop.wav",
+    waitForCompletion: true)
+    
+    let soundSuperBoost = SKAction.playSoundFileNamed("nitro.wav",
+                                                      waitForCompletion: false)
+    let soundTickTock = SKAction.playSoundFileNamed("tickTock.wav",
+                                                    waitForCompletion: true)
+    let soundBoost = SKAction.playSoundFileNamed("boost.wav",
+                                                 waitForCompletion: false)
+    let soundJump = SKAction.playSoundFileNamed("jump.wav",
+                                                waitForCompletion: false)
+    let soundCoin = SKAction.playSoundFileNamed("coin1.wav",
+                                                waitForCompletion: false)
+    let soundBrick = SKAction.playSoundFileNamed("brick.caf",
+                                                 waitForCompletion: false)
+    let soundHitLava = SKAction.playSoundFileNamed(
+        "DrownFireBug.mp3", waitForCompletion: false)
+    
+    let soundGameOver = SKAction.playSoundFileNamed(
+        "player_die.wav", waitForCompletion: false)
+    
+    let soundExplosions = [
+        SKAction.playSoundFileNamed("explosion1.wav",
+        waitForCompletion: false),
+        SKAction.playSoundFileNamed("explosion2.wav",
+        waitForCompletion: false),
+        SKAction.playSoundFileNamed("explosion3.wav",
+        waitForCompletion: false),
+        SKAction.playSoundFileNamed("explosion4.wav",
+        waitForCompletion: false)
+    ]
+    
     var gameState = GameStatus.waitingForTap
     var playerState = PlayerStatus.idle
     
@@ -88,6 +120,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
         let scale = SKAction.scale(to: 1.0, duration: 0.5)
         fgNode.childNode(withName: "Ready")!.run(scale)
+        
+        playBackgroundMusic(name: "SpaceGame.caf")
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -97,16 +131,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if let coin = other.node as? SKSpriteNode {
                 coin.removeFromParent()
                 jumpPlayer()
+                run(soundCoin)
             }
         case PhysicsCategory.CoinSpecial:
             if let coin = other.node as? SKSpriteNode {
                 coin.removeFromParent()
                 boostPlayer()
+                run(soundBoost)
             }
         case PhysicsCategory.PlatformNormal:
             if let _ = other.node as? SKSpriteNode {
                 if player.physicsBody!.velocity.dy < 0 {
                     jumpPlayer()
+                    run(soundJump)
                 }
             }
         case PhysicsCategory.PlatformBreakable:
@@ -114,6 +151,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if player.physicsBody!.velocity.dy < 0 {
                     platform.removeFromParent()
                     jumpPlayer()
+                    run(soundBrick)
                 }
             }
         default:
@@ -217,7 +255,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupPlayer() {
-        player.physicsBody = SKPhysicsBody(circleOfRadius:player.size.width * 0.9)
+        player.physicsBody = SKPhysicsBody(rectangleOf: player.size)
         player.physicsBody!.isDynamic = false
         player.physicsBody!.allowsRotation = false
         player.physicsBody!.categoryBitMask = PhysicsCategory.Player
@@ -321,6 +359,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 playerState = .toxicWaste
                 let smokeTrail = addTrail(name: "SmokeTrail")
                 run(SKAction.sequence([
+                    soundHitLava,
                     SKAction.wait(forDuration: 3.0),
                     SKAction.run() {
                         self.removeTrail(trail: smokeTrail)
@@ -505,6 +544,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         fgNode.childNode(withName: "Bomb")!.run(repeatSeq)
         run(SKAction.sequence([
             SKAction.wait(forDuration: 2.0),
+            soundBombDrop,
+            soundTickTock,
             SKAction.run(startGame)]))
     }
     
@@ -551,9 +592,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         bomb.removeFromParent()
         
+        run(soundExplosions[3])
+        
         gameState = .playing
         player.physicsBody!.isDynamic = true
         superBoostPlayer()
+        
+        playBackgroundMusic(name: "bgMusic.mp3")
+        
+        let alarm = SKAudioNode(fileNamed: "alarm.wav")
+        alarm.name = "alarm"
+        alarm.autoplayLooped = true
+        addChild(alarm)
     }
     
     func gameOver() {
@@ -574,10 +624,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         moveDown.timingMode = .easeIn
         player.run(SKAction.sequence([moveUp, moveDown]))
         
+        run(soundGameOver)
+        
         let gameOverSprite = SKSpriteNode(imageNamed: "GameOver")
         gameOverSprite.position = camera!.position
         gameOverSprite.zPosition = 10
         addChild(gameOverSprite)
+        
+        playBackgroundMusic(name: "SpaceGame.caf")
+        if let alarm = childNode(withName: "alarm") {
+            alarm.removeFromParent()
+        }
+    }
+    
+    // Sound
+    func playBackgroundMusic(name: String) {
+        if let backgroundMusic = childNode(withName:
+            "backgroundMusic") {
+            backgroundMusic.removeFromParent()
+        }
+        let music = SKAudioNode(fileNamed: name)
+        music.name = "backgroundMusic"
+        music.autoplayLooped = true
+        addChild(music)
     }
     
     // Events
