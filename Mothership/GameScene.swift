@@ -228,7 +228,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         overlayPosition.y = player.position.y -
             (player.size.height * 0.5 +
-                initialPlatform.size.height * 0.20)
+                initialPlatform.size.height * 0.35)
         
         initialPlatform.position = overlayPosition
         fgNode.addChild(initialPlatform)
@@ -428,8 +428,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func createForegroundOverlay(_ overlayTemplate: SKSpriteNode, flipX: Bool) {
         let foregroundOverlay = overlayTemplate.copy() as! SKSpriteNode
         lastOverlayPosition.y = lastOverlayPosition.y +
-            (lastOverlayHeight + (foregroundOverlay.size.height * 1.1))
-        lastOverlayHeight = foregroundOverlay.size.height * 1.1
+            (lastOverlayHeight + (foregroundOverlay.size.height / 1.5))
+        lastOverlayHeight = foregroundOverlay.size.height / 1.5
         foregroundOverlay.position = lastOverlayPosition
         
         if flipX == true {
