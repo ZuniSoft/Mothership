@@ -51,9 +51,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var player: SKSpriteNode!
     
+    var livesStartFactor: CGFloat!
     var lives = 3
     var livesArray: [SKSpriteNode]!
+    let liveNode = SKSpriteNode(imageNamed: "Life")
     
+    var scoreStartFactor: CGFloat!
     var scoreLabel: SKLabelNode!
     var score: Int = 0 {
         didSet {
@@ -119,7 +122,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                                  waitForCompletion: false)
     let soundHitLava = SKAction.playSoundFileNamed(
         "DrownFireBug.mp3", waitForCompletion: false)
-    
     let soundGameOver = SKAction.playSoundFileNamed(
         "player_die.wav", waitForCompletion: false)
     
@@ -138,6 +140,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var playerState = PlayerStatus.idle
     
     override func didMove(to view: SKView) {
+        // Setup HUD
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            livesStartFactor = 2
+            scoreStartFactor = 8
+        } else {
+            livesStartFactor = 1.6
+            scoreStartFactor = 4
+        }
+        
+        // Start setup
         setupNodes()
         setupLevel()
         setupPlayer()
@@ -146,7 +158,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Score
         scoreLabel = SKLabelNode(text: "Score: 0")
-        scoreLabel.position = CGPoint(x: -self.size.width / 2 + 185, y: self.size.height / 2 - 105)
+        scoreLabel.position = CGPoint(x: -self.size.width / 2 + self.size.width / scoreStartFactor,
+                                      y: self.size.height / 2 - 105)
         scoreLabel.fontName = "GillSans-Bold"
         scoreLabel.fontSize = 72
         scoreLabel.fontColor = UIColor.white
@@ -431,13 +444,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func addLives() {
         livesArray = [SKSpriteNode]()
-        
+
         for live in 1 ... lives {
             let liveNode = SKSpriteNode(imageNamed: "Life")
-
-            liveNode.position = CGPoint(x: -self.frame.width / 2 + CGFloat((live + 15) - lives) * liveNode.size.height, y: self.frame.height / 2 - 75)
+            
+            liveNode.position = CGPoint(x: -self.frame.width / livesStartFactor + CGFloat((live + 15) - lives) * liveNode.size.height, y: self.frame.height / 2 - 75)
             liveNode.zPosition = 6
-           
+         
             cameraNode.addChild(liveNode)
             livesArray.append(liveNode)
         }
@@ -566,12 +579,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createForegroundOverlay(_ overlayTemplate: SKSpriteNode, flipX: Bool) {
         let foregroundOverlay = overlayTemplate.copy() as! SKSpriteNode
-        //lastOverlayPosition.y = lastOverlayPosition.y +
-        //    (lastOverlayHeight + (foregroundOverlay.size.height / 2.0))
-        //lastOverlayHeight = foregroundOverlay.size.height / 2.0
-        
         lastOverlayPosition.y = lastOverlayPosition.y + (lastOverlayHeight + (foregroundOverlay.size.height / 0.80))
-            
         lastOverlayHeight = foregroundOverlay.size.height / 2.0
         
         foregroundOverlay.position = lastOverlayPosition
