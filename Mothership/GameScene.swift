@@ -42,13 +42,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Properties
     let gameGain: CGFloat = 2.5
+    
     var bgNode: SKNode!
     var fgNode: SKNode!
+    
     var backgroundOverlayTemplate: SKNode!
     var backgroundOverlayHeight: CGFloat!
+    
     var player: SKSpriteNode!
+    
     var lives = 3
-
+    var livesArray: [SKSpriteNode]!
+    
+    var scoreLabel: SKLabelNode!
+    var score: Int = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
+    
     var platform5Across: SKSpriteNode!
     var coinArrow: SKSpriteNode!
     var platformArrow: SKSpriteNode!
@@ -77,6 +89,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var timeForNextExplosion: TimeInterval = 1.0
     
     var toxicWaste: SKSpriteNode!
+    
     var lastOverlayPosition = CGPoint.zero
     var lastOverlayHeight: CGFloat = 0.0
     var levelPositionY: CGFloat = 0.0
@@ -129,6 +142,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupLevel()
         setupPlayer()
         setupCoreMotion()
+        addLives()
+        
+        // Score
+        scoreLabel = SKLabelNode(text: "Score: 0")
+        scoreLabel.position = CGPoint(x: -self.size.width / 2 + 185, y: self.size.height / 2 - 105)
+        scoreLabel.fontName = "GillSans-Bold"
+        scoreLabel.fontSize = 72
+        scoreLabel.fontColor = UIColor.white
+        scoreLabel.zPosition = 6
+        score = 0
+        
+        cameraNode.addChild(scoreLabel)
         
         physicsWorld.contactDelegate = self
         let scale = SKAction.scale(to: 1.0, duration: 0.5)
@@ -144,6 +169,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             "Player01_steerright_", start: 1, end: 2, timePerFrame: 0.1)
         
         playBackgroundMusic(name: "SpaceGame.caf")
+        
+        self.view?.showsFPS = false
+        self.view?.showsNodeCount = false
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -154,12 +182,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 emitParticles(name: "CollectNormal", sprite: coin)
                 jumpPlayer()
                 run(soundCoin)
+                score += 5
             }
         case PhysicsCategory.CoinSpecial:
             if let coin = other.node as? SKSpriteNode {
                 emitParticles(name: "CollectSpecial", sprite: coin)
                 boostPlayer()
                 run(soundBoost)
+                score += 10
             }
         case PhysicsCategory.PlatformNormal:
             if let _ = other.node as? SKSpriteNode {
@@ -399,6 +429,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setPlayerVelocity(1700)
     }
     
+    func addLives() {
+        livesArray = [SKSpriteNode]()
+        
+        for live in 1 ... lives {
+            let liveNode = SKSpriteNode(imageNamed: "Life")
+
+            liveNode.position = CGPoint(x: -self.frame.width / 2 + CGFloat((live + 15) - lives) * liveNode.size.height, y: self.frame.height / 2 - 75)
+            liveNode.zPosition = 6
+           
+            cameraNode.addChild(liveNode)
+            livesArray.append(liveNode)
+        }
+    }
+    
     func addTrail(name: String) -> SKEmitterNode {
         let trail = SKEmitterNode(fileNamed: name)!
         trail.zPosition = -1
@@ -456,6 +500,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             boostPlayer()
             lives -= 1
+            
+            if self.livesArray.count > 0 {
+                let liveNode = self.livesArray.first
+                liveNode!.removeFromParent()
+                self.livesArray.removeFirst()
+            }
+            
             if lives <= 0 {
                 gameOver()
             }
