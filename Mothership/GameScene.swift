@@ -181,10 +181,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         playerAnimationSteerRight = setupAnimationWithPrefix(
             "Player01_steerright_", start: 1, end: 2, timePerFrame: 0.1)
         
-        playBackgroundMusic(name: "SpaceGame.caf")
-        
-        self.view?.showsFPS = false
-        self.view?.showsNodeCount = false
+        playBackgroundMusic(name: "SpaceGame.wav")
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -683,6 +680,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func bombDrop() {
         gameState = .waitingForBomb
+        
         // Scale out title & ready label.
         let scale = SKAction.scale(to: 0, duration: 0.4)
         fgNode.childNode(withName: "Title")!.run(scale)
@@ -691,10 +689,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 [SKAction.wait(forDuration: 0.2), scale]))
         
         // Bounce bomb
-        let scaleUp = SKAction.scale(to: 1.25, duration: 0.25)
-        let scaleDown = SKAction.scale(to: 1.0, duration: 0.25)
-        let sequence = SKAction.sequence([scaleUp, scaleDown])
+        let scaleUp = SKAction.scale(to: 0.75, duration: 0.25)
+        let scaleDown = SKAction.scale(to: 0.5, duration: 0.25)
+        let rotateRight = SKAction.rotate(toAngle: CGFloat(Double.pi / -4), duration: 0.25)
+        let rotateLeft = SKAction.rotate(toAngle: CGFloat(Double.pi / 4), duration: 0.25)
+        let sequence = SKAction.sequence([rotateRight, scaleUp, rotateLeft, scaleDown])
         let repeatSeq = SKAction.repeatForever(sequence)
+        
         fgNode.childNode(withName: "Bomb")!.run(SKAction.unhide())
         fgNode.childNode(withName: "Bomb")!.run(repeatSeq)
         run(SKAction.sequence([
@@ -820,11 +821,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.physicsBody!.isDynamic = true
         superBoostPlayer()
         
-        playBackgroundMusic(name: "bgMusic.mp3")
+        playBackgroundMusic(name: "bgMusic.wav")
         
-        let alarm = SKAudioNode(fileNamed: "alarm.wav")
+        let alarm = SKAudioNode(fileNamed: "alarm.mp3")
         alarm.name = "alarm"
         alarm.autoplayLooped = true
+        alarm.run(SKAction.changeVolume(to: Float(0.2), duration: 0))
         addChild(alarm)
     }
     
@@ -853,7 +855,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverSprite.zPosition = 10
         addChild(gameOverSprite)
         
-        playBackgroundMusic(name: "SpaceGame.caf")
+        playBackgroundMusic(name: "SpaceGame.wav")
         if let alarm = childNode(withName: "alarm") {
             alarm.removeFromParent()
         }
@@ -871,9 +873,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             "backgroundMusic") {
             backgroundMusic.removeFromParent()
         }
+        
         let music = SKAudioNode(fileNamed: name)
         music.name = "backgroundMusic"
+        
+        // Set volume depending on music file requested
+        if name == "bgMusic.wav" {
+            music.run(SKAction.changeVolume(to: Float(1.0), duration: 0))
+        } else {
+            music.run(SKAction.changeVolume(to: Float(0.3), duration: 0))
+        }
         music.autoplayLooped = true
+        
         addChild(music)
     }
     
