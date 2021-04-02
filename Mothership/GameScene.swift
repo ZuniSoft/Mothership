@@ -252,13 +252,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         bgNode = worldNode.childNode(withName: "Background")!
         backgroundOverlayTemplate = bgNode
-            .childNode(withName: "Overlay")!.copy() as! SKNode
+            .childNode(withName: "Overlay")!.copy() as? SKNode
         backgroundOverlayHeight = backgroundOverlayTemplate
             .calculateAccumulatedFrame().height
         
         fgNode = worldNode.childNode(withName: "Foreground")!
         
-        player = fgNode.childNode(withName: "Player") as! SKSpriteNode
+        player = fgNode.childNode(withName: "Player") as? SKSpriteNode
         fgNode.childNode(withName: "Bomb")?.run(SKAction.hide())
         
         coinAnimation = setupAnimationWithPrefix("powerup05_",
@@ -484,7 +484,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupToxicWaste() {
-        toxicWaste = fgNode.childNode(withName: "ToxicWaste") as! SKSpriteNode
+        toxicWaste = fgNode.childNode(withName: "ToxicWaste") as? SKSpriteNode
         let emitter = SKEmitterNode(fileNamed: "ToxicWaste.sks")!
         emitter.particlePositionRange = CGVector(dx: size.width
             * 1.125, dy: 0.0)
